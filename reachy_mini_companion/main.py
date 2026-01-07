@@ -15,6 +15,8 @@ import time
 from reachy_mini import ReachyMini, ReachyMiniApp
 from reachy_mini.utils import create_head_pose
 
+from .emotions import EmotionManager
+
 
 class ReachyMiniCompanion(ReachyMiniApp):
     """
@@ -64,12 +66,17 @@ class ReachyMiniCompanion(ReachyMiniApp):
         Initialize the companion's systems.
 
         We'll add initialization for:
-        - Camera/vision system
-        - AI/LLM connection
-        - Memory/state
-        - Personality traits
+        - Emotion system ✅
+        - Camera/vision system (later)
+        - AI/LLM connection (later)
+        - Memory/state (later)
+        - Personality traits (later)
         """
         print("   Initializing companion systems...")
+
+        # Initialize emotion manager
+        self.emotion_manager = EmotionManager(reachy_mini, verbose=True)
+        print("   ✅ Emotion system ready")
 
         # Return to neutral position
         neutral_head = create_head_pose(roll=0, pitch=0, yaw=0)
@@ -77,6 +84,13 @@ class ReachyMiniCompanion(ReachyMiniApp):
         time.sleep(1.0)
 
         print("   ✅ Companion ready!")
+
+        # Test emotions on startup (remove this later)
+        print("   Testing emotions...")
+        time.sleep(1.0)
+        self.emotion_manager.show_emotion(EmotionManager.HAPPY, with_antennas=True)
+        time.sleep(1.0)
+        self.emotion_manager.neutral()
 
     def idle_behavior(self, reachy_mini: ReachyMini):
         """
