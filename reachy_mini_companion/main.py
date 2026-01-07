@@ -142,3 +142,11 @@ class ReachyMiniCompanion(ReachyMiniApp):
         reachy_mini.goto_target(head=neutral_head, antennas=[0, 0], duration=0.5)
         time.sleep(0.5)
         print("   ✅ Cleanup complete")
+
+
+if __name__ == "__main__":
+    app = ReachyMiniCompanion()
+    try:
+        app.wrapped_run()
+    except KeyboardInterrupt:
+        app.stop()
