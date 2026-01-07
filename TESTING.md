@@ -39,8 +39,16 @@ pip install -e .
 ```
 
 ### Step 3: Start Dashboard (if not running)
+
+**Option A: Dashboard with viewer (Recommended - See movements!)**
 ```bash
-# For simulator testing
+# Dashboard launches simulator with visual viewer
+mjpython -m reachy_mini.daemon.app.main --sim
+```
+
+**Option B: Headless (No visual feedback)**
+```bash
+# If you already have simulator running separately
 reachy-mini-daemon --sim --headless
 ```
 
