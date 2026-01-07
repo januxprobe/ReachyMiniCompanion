@@ -18,10 +18,11 @@ echo ""
 
 # Step 1: Check app structure
 echo -e "${YELLOW}[1/3] Running app structure checks...${NC}"
-if reachy-mini-app-assistant check --path .; then
+if echo "." | reachy-mini-app-assistant check > /dev/null 2>&1; then
     echo -e "${GREEN}✅ All checks passed!${NC}"
 else
-    echo -e "${RED}❌ Checks failed! Fix the issues above before continuing.${NC}"
+    echo -e "${RED}❌ Checks failed!${NC}"
+    echo -e "${YELLOW}Run manually to see details:${NC} reachy-mini-app-assistant check"
     exit 1
 fi
 echo ""
