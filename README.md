@@ -116,5 +116,5 @@ Apache 2.0
 
 ---
 
-*Built with ❤️ for Reachy Mini*
-*Last updated: January 7, 2026*
+Built with ❤️ for Reachy Mini
+Last updated: January 7, 2026
