@@ -15,7 +15,10 @@ import time
 from reachy_mini import ReachyMini, ReachyMiniApp
 from reachy_mini.utils import create_head_pose
 
-from .emotions import EmotionManager
+try:
+    from .emotions import EmotionManager
+except ImportError:
+    from emotions import EmotionManager
 
 
 class ReachyMiniCompanion(ReachyMiniApp):
@@ -85,11 +88,33 @@ class ReachyMiniCompanion(ReachyMiniApp):
 
         print("   ✅ Companion ready!")
 
-        # Test emotions on startup (remove this later)
-        print("   Testing emotions...")
+        # Test all emotions on startup (remove this later)
+        print("\n   🎭 Testing all emotions...")
+        print("   Press Ctrl+C anytime to skip to idle mode\n")
         time.sleep(1.0)
+
+        # Test CURIOUS
+        print("   [1/4] Testing CURIOUS...")
+        self.emotion_manager.show_emotion(EmotionManager.CURIOUS, with_antennas=True)
+        time.sleep(1.0)
+
+        # Test HAPPY
+        print("   [2/4] Testing HAPPY...")
         self.emotion_manager.show_emotion(EmotionManager.HAPPY, with_antennas=True)
         time.sleep(1.0)
+
+        # Test EXCITED
+        print("   [3/4] Testing EXCITED...")
+        self.emotion_manager.show_emotion(EmotionManager.EXCITED, with_antennas=False)
+        time.sleep(1.0)
+
+        # Test SAD
+        print("   [4/4] Testing SAD...")
+        self.emotion_manager.show_emotion(EmotionManager.SAD, with_antennas=True)
+        time.sleep(1.0)
+
+        # Return to neutral
+        print("   ✅ All emotions tested! Returning to neutral...\n")
         self.emotion_manager.neutral()
 
     def idle_behavior(self, reachy_mini: ReachyMini):
@@ -125,8 +150,25 @@ if __name__ == "__main__":
     print("   (In production, this runs via the dashboard)")
     print()
 
-    # Create robot instance for testing
-    robot = ReachyMini(localhost_only=True, media_backend="no_media")
+    # Choose mode
+    print("Select mode:")
+    print("  1 - Simulator (localhost)")
+    print("  2 - Real Robot (wireless)")
+    mode = input("Enter 1 or 2: ").strip()
+
+    if mode == "1":
+        print("\n🎮 Connecting to SIMULATOR...")
+        print("   (Make sure simulator daemon is running!)")
+        robot = ReachyMini(localhost_only=True, media_backend="no_media")
+        print("   ✅ Connected to simulator!")
+    elif mode == "2":
+        print("\n🤖 Connecting to REAL ROBOT...")
+        print("   (Make sure robot is powered on and connected to WiFi!)")
+        robot = ReachyMini(localhost_only=False, media_backend="no_media")
+        print("   ✅ Connected to real robot!")
+    else:
+        print("❌ Invalid choice!")
+        exit(1)
 
     # Create stop event for testing
     stop_event = threading.Event()
