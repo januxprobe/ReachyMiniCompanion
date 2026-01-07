@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reachy Mini Companion</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        ul li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        ul li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+        .install-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .install-box code {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .status {
+            display: inline-block;
+            background: #ffc107;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🤖</span>Reachy Mini Companion</h1>
+
+        <p class="status">🚧 In Development</p>
+
+        <p>An AI-powered desk companion that brings Reachy Mini to life with expressive emotions, natural conversations, and an engaging personality.</p>
+
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Expressive Emotions:</strong> Happy, sad, excited, and curious with synchronized head and antenna movements</li>
+            <li><strong>Natural Conversations:</strong> Powered by Google Gemini multimodal AI (coming soon)</li>
+            <li><strong>Personality System:</strong> Customizable companion personality (planned)</li>
+            <li><strong>Memory & Context:</strong> Remembers conversations and learns your preferences (planned)</li>
+            <li><strong>Proactive Engagement:</strong> Initiates interactions, not just reactive (planned)</li>
+        </ul>
+
+        <h2>Current Status</h2>
+        <ul>
+            <li>✅ Phase 1: Emotion system with 4 emotions and antenna behaviors</li>
+            <li>⏳ Phase 2: AI conversation system with Gemini</li>
+            <li>⏳ Phase 3: Personality profiles and memory</li>
+            <li>⏳ Phase 4: Web UI with Gradio</li>
+        </ul>
+
+        <h2>Installation</h2>
+        <div class="install-box">
+            <p><strong>From Reachy Mini Dashboard:</strong></p>
+            <ol>
+                <li>Open your Reachy Mini dashboard</li>
+                <li>Go to Applications tab</li>
+                <li>Install from HuggingFace Space: <code>januxprobe/ReachyMiniCompanion</code></li>
+                <li>Click Run to start</li>
+            </ol>
+        </div>
+
+        <h2>Development</h2>
+        <p>This project is built step-by-step with a learning-first approach. Each phase is tested in simulation and on real hardware before moving forward.</p>
+
+        <p><strong>Repository:</strong> <a href="https://github.com/januxprobe/ReachyMiniCompanion" target="_blank">github.com/januxprobe/ReachyMiniCompanion</a></p>
+
+        <h2>Technologies</h2>
+        <ul>
+            <li>Reachy Mini SDK for robot control</li>
+            <li>Google Gemini 2.5 Flash Live for multimodal AI</li>
+            <li>Gradio for web interface (planned)</li>
+            <li>Python threading for responsive movements</li>
+        </ul>
+
+        <h2>About</h2>
+        <p>Built with ❤️ as a learning project to explore building an engaging AI companion with physical presence.</p>
+        <p><em>Last updated: January 7, 2026</em></p>
+    </div>
+</body>
+</html>
