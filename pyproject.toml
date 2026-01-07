@@ -25,5 +25,8 @@ dev = [
     "ruff>=0.1.0",
 ]
 
+[project.entry-points."reachy_mini.app"]
+reachy-mini-companion = "reachy_mini_companion.main:ReachyMiniCompanion"
+
 [tool.hatch.build.targets.wheel]
 packages = ["reachy_mini_companion"]
