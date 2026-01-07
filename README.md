@@ -1,3 +1,16 @@
+---
+title: Reachy Mini Companion
+emoji: 🤖
+colorFrom: purple
+colorTo: blue
+sdk: static
+pinned: false
+short_description: AI-powered desk companion with emotions, conversations, and personality
+tags:
+  - reachy_mini
+  - reachy_mini_python_app
+---
+
 # Reachy Mini Companion 🤖✨
 
 An AI-powered desk companion built for Reachy Mini robot. Makes your robot a friendly, interactive companion that can see, listen, think, and respond naturally.
