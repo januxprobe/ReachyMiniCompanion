@@ -114,7 +114,8 @@ This is a personal learning project, but ideas and suggestions welcome!
 
 Apache 2.0
 
----
+## About
 
 Built with ❤️ for Reachy Mini
+
 Last updated: January 7, 2026
