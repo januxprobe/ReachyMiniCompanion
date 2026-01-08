@@ -2,7 +2,81 @@
 
 ---
 
-## Session: January 8, 2026
+## Session: January 8, 2026 (Evening)
+
+### Today's Accomplishments ✅
+
+#### Phase 2: Gemini Live API Conversation System (COMPLETE!)
+- ✅ Built complete real-time voice conversation system with Gemini Live API
+  - Queue-based architecture (listen → send → receive → play)
+  - Bidirectional audio streaming (mic ↔ Gemini ↔ speakers)
+  - Automatic format conversion (stereo/mono, 16kHz/24kHz/48kHz)
+  - Interruption handling (can interrupt AI mid-response)
+  - Based on official Google example pattern with TaskGroups
+- ✅ Flexible audio conversion system
+  - Dynamic sample rate conversion (resample_audio function)
+  - Stereo ↔ mono conversion
+  - Float32 ↔ PCM16 conversion
+  - Handles Mac audio (48kHz), Gemini (24kHz), and robot (16kHz)
+- ✅ Working back-and-forth conversations!
+  - Continuous listening after each response
+  - Natural conversation flow
+  - Clear audio at correct playback speed
+  - Tested successfully with countdown cues
+- ✅ Comprehensive testing suite
+  - Integration tests with speaking cues
+  - Example scripts for quick testing
+  - Documentation and API reference
+
+### What Works Now
+- 🎙️ **Real-time voice conversations** - Speak to the robot, hear Gemini respond
+- 🔄 **Back-and-forth dialogue** - Continuous multi-turn conversations
+- 🎵 **Clear audio** - Correct playback speed with proper resampling
+- ⚡ **Responsive** - Quick response times, can interrupt Gemini
+- 🤖 **Robot ready** - Works with both simulator and real robot
+
+### Technical Highlights
+- Input: Robot mic (16kHz stereo) → Gemini (16kHz mono PCM)
+- Output: Gemini (24kHz mono PCM) → Mac speakers (48kHz stereo)
+- Architecture: Separate async tasks for each operation (listen, send, receive, play)
+- Key fix: Using official Google pattern `turn = session.receive()` then `async for response in turn`
+- Minimal config: Just `response_modalities: ["AUDIO"]` without custom VAD
+
+### Files Created/Modified
+- `reachy_mini_companion/conversation_manager.py` - Main conversation system
+- `reachy_mini_companion/audio_converters.py` - Enhanced with flexible resampling
+- `tests/test_conversation.py` - Integration tests with speaking cues
+- `examples/simple_conversation.py` - Quick example
+- `docs/CONVERSATION_MANAGER.md` - API documentation
+
+### Git Status
+- All changes committed and pushed to GitHub
+- Repository: https://github.com/januxprobe/ReachyMiniCompanion
+- Branch: main
+- Latest commit: `8a33364` - Add working Gemini Live API conversation system
+
+### Key Learnings Today
+1. **Official patterns matter** - Google's example architecture works reliably
+2. **Queue-based design** - Separate tasks for each operation prevents blocking
+3. **Sample rate conversion** - Mac audio runs at 48kHz, needs proper resampling
+4. **Minimal config wins** - Simple setup without custom VAD is more reliable
+5. **Audio format handling** - Stereo/mono and sample rate conversions are critical
+
+### What's Next (Next Session)
+**Phase 2.5: Integrate Conversation into Main App**
+
+Make it a **real companion** by integrating conversation into `main.py`:
+1. Add ConversationManager to ReachyMiniCompanion app
+2. Start conversations from dashboard UI
+3. Link emotions to conversation context (happy when talking, curious when listening)
+4. Add conversation state management
+5. Test full companion experience through dashboard
+
+**Goal**: Have real conversations with the robot as a desk companion, not just via test scripts!
+
+---
+
+## Session: January 8, 2026 (Morning)
 
 ### Today's Accomplishments ✅
 
