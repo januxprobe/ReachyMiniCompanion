@@ -17,8 +17,10 @@ from reachy_mini.utils import create_head_pose
 
 try:
     from .emotions import EmotionManager
+    from .movement_manager import MovementManager
 except ImportError:
     from emotions import EmotionManager
+    from movement_manager import MovementManager
 
 
 class ReachyMiniCompanion(ReachyMiniApp):
@@ -70,6 +72,7 @@ class ReachyMiniCompanion(ReachyMiniApp):
 
         We'll add initialization for:
         - Emotion system ✅
+        - Movement manager ✅
         - Camera/vision system (later)
         - AI/LLM connection (later)
         - Memory/state (later)
@@ -81,41 +84,43 @@ class ReachyMiniCompanion(ReachyMiniApp):
         self.emotion_manager = EmotionManager(reachy_mini, verbose=True)
         print("   ✅ Emotion system ready")
 
+        # Initialize movement manager
+        self.movement_manager = MovementManager(reachy_mini, verbose=True)
+        print("   ✅ Movement manager ready")
+
         # Return to neutral position
         neutral_head = create_head_pose(roll=0, pitch=0, yaw=0)
         reachy_mini.goto_target(head=neutral_head, antennas=[0, 0], duration=1.0)
         time.sleep(1.0)
 
-        print("   ✅ Companion ready!")
+        # Start movement manager
+        self.movement_manager.start()
 
-        # Test all emotions on startup (remove this later)
-        print("\n   🎭 Testing all emotions...")
-        print("   Press Ctrl+C anytime to skip to idle mode\n")
-        time.sleep(1.0)
+        # Queue startup emotion tests (non-blocking!)
+        print("\n   🎭 Queuing startup emotion tests...")
+        self.movement_manager.execute_emotion(
+            self.emotion_manager, EmotionManager.CURIOUS, with_antennas=True
+        )
+        self.movement_manager.execute_emotion(
+            self.emotion_manager, EmotionManager.HAPPY, with_antennas=True
+        )
+        self.movement_manager.execute_emotion(
+            self.emotion_manager, EmotionManager.EXCITED, with_antennas=False
+        )
+        self.movement_manager.execute_emotion(
+            self.emotion_manager, EmotionManager.SAD, with_antennas=True
+        )
 
-        # Test CURIOUS
-        print("   [1/4] Testing CURIOUS...")
-        self.emotion_manager.show_emotion(EmotionManager.CURIOUS, with_antennas=True)
-        time.sleep(1.0)
+        # Queue return to neutral
+        def return_neutral(robot):
+            self.emotion_manager.neutral()
 
-        # Test HAPPY
-        print("   [2/4] Testing HAPPY...")
-        self.emotion_manager.show_emotion(EmotionManager.HAPPY, with_antennas=True)
-        time.sleep(1.0)
+        self.movement_manager.execute_gesture(
+            return_neutral, name="return_to_neutral"
+        )
 
-        # Test EXCITED
-        print("   [3/4] Testing EXCITED...")
-        self.emotion_manager.show_emotion(EmotionManager.EXCITED, with_antennas=False)
-        time.sleep(1.0)
-
-        # Test SAD
-        print("   [4/4] Testing SAD...")
-        self.emotion_manager.show_emotion(EmotionManager.SAD, with_antennas=True)
-        time.sleep(1.0)
-
-        # Return to neutral
-        print("   ✅ All emotions tested! Returning to neutral...\n")
-        self.emotion_manager.neutral()
+        print(f"   📋 Queued {self.movement_manager.get_queue_size()} movements")
+        print("   ✅ Companion ready!\n")
 
     def idle_behavior(self, reachy_mini: ReachyMini):
         """
@@ -136,8 +141,14 @@ class ReachyMiniCompanion(ReachyMiniApp):
         """
         Cleanup when app stops.
 
-        Return robot to neutral position.
+        Stop movement manager and return robot to neutral position.
         """
+        # Stop movement manager
+        if hasattr(self, 'movement_manager'):
+            self.movement_manager.stop()
+            print("   ✅ Movement manager stopped")
+
+        # Return to neutral position
         neutral_head = create_head_pose(roll=0, pitch=0, yaw=0)
         reachy_mini.goto_target(head=neutral_head, antennas=[0, 0], duration=0.5)
         time.sleep(0.5)
