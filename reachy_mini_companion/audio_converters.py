@@ -84,43 +84,51 @@ def mono_to_stereo(mono_audio: np.ndarray) -> np.ndarray:
     return np.column_stack([mono_audio, mono_audio]).astype(np.float32)
 
 
-def resample_24k_to_16k(audio_24k: np.ndarray) -> np.ndarray:
+def resample_audio(audio: np.ndarray, from_rate: int, to_rate: int) -> np.ndarray:
     """
-    Resample audio from 24kHz to 16kHz.
-
-    Gemini outputs 24kHz audio, but Reachy Mini uses 16kHz.
-    This function downsamples by a factor of 1.5 (24000/16000).
+    Resample audio from one sample rate to another.
 
     Args:
-        audio_24k: Audio at 24kHz sample rate
+        audio: Audio at original sample rate
             - Shape: (num_samples,) for mono
             - dtype: float32
             - Values: -1.0 to 1.0 (normalized)
+        from_rate: Original sample rate (e.g., 24000)
+        to_rate: Target sample rate (e.g., 48000)
 
     Returns:
-        Audio at 16kHz sample rate
-            - Shape: (num_samples * 2 // 3,)
+        Audio at target sample rate
+            - Shape: (num_samples * to_rate // from_rate,)
             - dtype: float32
             - Values: -1.0 to 1.0 (normalized)
 
     Example:
         >>> audio_24k = np.sin(2 * np.pi * 440 * np.arange(24000) / 24000)
-        >>> audio_16k = resample_24k_to_16k(audio_24k)
-        >>> len(audio_16k)
-        16000
+        >>> audio_48k = resample_audio(audio_24k, 24000, 48000)
+        >>> len(audio_48k)
+        48000
     """
-    if audio_24k.ndim != 1:
+    if audio.ndim != 1:
         raise ValueError(
-            f"Expected mono audio with shape (samples,), got {audio_24k.shape}"
+            f"Expected mono audio with shape (samples,), got {audio.shape}"
         )
 
-    # Calculate new length: 24000 -> 16000 means 2/3 of original
-    num_samples_16k = len(audio_24k) * 2 // 3
+    # Calculate new length
+    num_samples_new = int(len(audio) * to_rate / from_rate)
 
     # Use scipy's resample (uses FFT, high quality)
-    audio_16k = signal.resample(audio_24k, num_samples_16k)
+    audio_resampled = signal.resample(audio, num_samples_new)
 
-    return audio_16k.astype(np.float32)
+    return audio_resampled.astype(np.float32)
+
+
+def resample_24k_to_16k(audio_24k: np.ndarray) -> np.ndarray:
+    """
+    Resample audio from 24kHz to 16kHz.
+
+    This is kept for backward compatibility.
+    """
+    return resample_audio(audio_24k, 24000, 16000)
 
 
 def float32_to_pcm16(audio_float: np.ndarray) -> bytes:
@@ -225,37 +233,41 @@ def prepare_for_gemini(stereo_audio: np.ndarray) -> Tuple[bytes, str]:
 
 
 def prepare_from_gemini(
-    pcm_bytes: bytes, sample_rate: int = 24000
+    pcm_bytes: bytes,
+    sample_rate: int = 24000,
+    target_sample_rate: int = 48000
 ) -> np.ndarray:
     """
     Prepare Gemini audio for playing on robot speakers.
 
-    Converts mono PCM bytes (typically 24kHz) to stereo 16kHz float32.
+    Converts mono PCM bytes to stereo float32 at the target sample rate.
 
     Args:
         pcm_bytes: Raw 16-bit PCM audio bytes from Gemini
-        sample_rate: Sample rate of the incoming audio (24000 or 16000)
+        sample_rate: Sample rate of the incoming audio (default: 24000)
+        target_sample_rate: Target sample rate for playback (default: 48000)
+            Use 48000 for Mac's default audio (most common)
+            Use 16000 for ReachyMini hardware
+            Use 44100 for some audio interfaces
 
     Returns:
-        Robot-compatible audio (stereo, 16kHz)
+        Robot-compatible audio (stereo, at target_sample_rate)
             - Shape: (num_samples, 2)
             - dtype: float32
             - Values: -1.0 to 1.0
 
     Example:
         >>> pcm_bytes = (np.random.randn(2400) * 1000).astype(np.int16).tobytes()
-        >>> robot_audio = prepare_from_gemini(pcm_bytes, sample_rate=24000)
+        >>> robot_audio = prepare_from_gemini(pcm_bytes, sample_rate=24000, target_sample_rate=48000)
         >>> robot_audio.shape[1]
         2  # Stereo
     """
     # Step 1: Convert PCM bytes to float32 mono
     mono_audio = pcm16_to_float32(pcm_bytes, num_channels=1)
 
-    # Step 2: Resample if needed (24kHz -> 16kHz)
-    if sample_rate == 24000:
-        mono_audio = resample_24k_to_16k(mono_audio)
-    elif sample_rate != 16000:
-        raise ValueError(f"Unsupported sample rate: {sample_rate}")
+    # Step 2: Resample if needed
+    if sample_rate != target_sample_rate:
+        mono_audio = resample_audio(mono_audio, sample_rate, target_sample_rate)
 
     # Step 3: Convert mono to stereo
     stereo_audio = mono_to_stereo(mono_audio)
