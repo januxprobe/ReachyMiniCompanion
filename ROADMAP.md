@@ -235,24 +235,56 @@ Step-by-step learning path to build a complete AI desk companion.
 
 ## Phase 5: Advanced Intelligence
 
-### Step 5.1: Visual Understanding (Optional)
-**Goal**: Show robot things and ask questions
+### Step 5.1: Multimodal Conversations (Vision + Voice)
+**Goal**: Combine camera vision with conversations
 
 **What to learn:**
 - Gemini vision API
 - Combining vision + conversation
-- Context sharing
+- Context sharing between modalities
 
 **Tasks:**
 - [ ] Capture frames from camera
-- [ ] Send frames to Gemini
-- [ ] Ask visual questions
-- [ ] Get multimodal responses
+- [ ] Send frames to Gemini during conversations
+- [ ] Enable visual questions ("What is this?", "Read this text")
+- [ ] Creative brainstorming with visual aids
+- [ ] Document analysis (show documents to robot)
+
+**Use cases:**
+- **Creative brainstorming**: Show sketches, get feedback
+- **Document analysis**: Show papers, get summaries
+- **Visual assistance**: "What should I wear?", "Is this fresh?"
 
 **Success criteria:**
 - Can answer questions about what it sees
 - Maintains conversation context
-- Smooth integration
+- Smooth multimodal integration
+
+---
+
+### Step 5.2: Real-time Translation
+**Goal**: Multi-language translation in conversations
+
+**What to learn:**
+- Gemini translation capabilities
+- Language detection
+- Maintaining conversation flow across languages
+
+**Tasks:**
+- [ ] Add language selection/detection
+- [ ] Enable real-time translation mode
+- [ ] Translate both ways (user ↔ Gemini)
+- [ ] Support common languages
+
+**Use cases:**
+- **Language learning**: Practice conversations
+- **Translation assistant**: Translate text shown to camera
+- **Multilingual communication**: Talk in one language, hear another
+
+**Success criteria:**
+- Accurate real-time translation
+- Natural conversation flow
+- Multiple languages supported
 
 ---
 
@@ -300,47 +332,139 @@ Step-by-step learning path to build a complete AI desk companion.
 
 ---
 
-### Step 6.3: Personality & Proactivity
+### Step 6.3: Proactive Life Assistant
+**Goal**: Daily planning and wellness coaching
+
+**What to learn:**
+- Calendar integration (via Gemini)
+- Time-based reminders
+- Habit tracking through conversation
+- Proactive suggestions
+
+**Tasks:**
+- [ ] Daily planner features
+  - [ ] Proactive calendar management
+  - [ ] Morning briefings ("Here's your day...")
+  - [ ] Outfit suggestions (with camera)
+  - [ ] Meal planning suggestions
+- [ ] Wellness & routine coach
+  - [ ] Habit tracking through check-ins
+  - [ ] Mood tracking
+  - [ ] Personalized motivation
+  - [ ] Self-care reminders
+- [ ] Proactive behaviors
+  - [ ] Initiate conversations based on time
+  - [ ] Check-in reminders
+  - [ ] Celebration of achievements
+
+**Use cases:**
+- **Morning routine**: "Good morning! Here's your schedule, weather is nice, and I suggest the blue shirt"
+- **Wellness check**: "You mentioned wanting to meditate daily. Have you had time today?"
+- **Meal planning**: "It's 6pm, what are you thinking for dinner? I can suggest recipes"
+
+**Success criteria:**
+- Helpful without being annoying
+- Remembers user preferences
+- Adapts to routines
+- Feels like a supportive companion
+
+---
+
+### Step 6.4: Gaming & Entertainment Companion
+**Goal**: Real-time gaming support and encouragement
+
+**What to learn:**
+- Screen capture/vision of gameplay
+- Context awareness of game state
+- Supportive personality modes
+
+**Tasks:**
+- [ ] Real-time strategy advisor
+  - [ ] Watch gameplay via camera
+  - [ ] Provide tactical suggestions
+  - [ ] Identify patterns/vulnerabilities
+- [ ] AI quest companion
+  - [ ] Access game wikis/databases
+  - [ ] Provide lore and stats on demand
+  - [ ] Quick info lookup without pausing
+- [ ] Gaming wingman
+  - [ ] Celebrate wins with excitement
+  - [ ] Encourage after losses
+  - [ ] Provide real-time hype
+  - [ ] Track gaming sessions
+
+**Use cases:**
+- **Strategy games**: "Enemy flanking from left, watch your resources"
+- **RPGs**: "That boss is weak to fire damage, use your fire spell"
+- **General gaming**: "Nice combo! You're getting good at this"
+
+**Success criteria:**
+- Helpful without being distracting
+- Appropriate emotional responses
+- Quick information retrieval
+- Feels like a true gaming buddy
+
+---
+
+### Step 6.5: Personality & Core Behaviors
 **Goal**: Robot has character and initiative
 
 **What to learn:**
 - Personality parameters
-- Proactive triggers
-- Engagement patterns
+- Idle behaviors
+- Natural engagement patterns
 
 **Tasks:**
 - [ ] Define personality traits
-- [ ] Add idle behaviors
-- [ ] Initiate conversations
+- [ ] Add idle behaviors (looking around, small movements)
 - [ ] React to environment
+- [ ] Consistent character across all modes
 
 **Success criteria:**
-- Consistent personality
-- Proactive without annoying
-- Feels alive
+- Consistent personality across all features
+- Natural idle behaviors
+- Feels alive and present
 
 ---
 
 ## Phase 7: Polish & Publishing
 
-### Step 7.1: Web UI (Optional)
-**Goal**: Control panel for settings
+### Step 7.1: Web Chatbot Interface
+**Goal**: Browser-based chat interface for text conversations
 
 **What to learn:**
 - FastAPI web serving
-- HTML/JS/CSS basics
-- Real-time updates
+- WebSocket for real-time chat
+- HTML/JS/CSS for chat UI
+- Text-based conversation mode
 
 **Tasks:**
-- [ ] Create static/ directory
-- [ ] Build settings page
-- [ ] Add controls
-- [ ] Connect to app logic
+- [ ] Create web chat interface
+  - [ ] Chat UI with message history
+  - [ ] Real-time message updates
+  - [ ] Voice input option (browser speech API)
+  - [ ] Image upload for visual questions
+- [ ] Settings panel
+  - [ ] Conversation mode selection
+  - [ ] Personality adjustment
+  - [ ] Feature toggles
+- [ ] Status dashboard
+  - [ ] Robot state
+  - [ ] Conversation history
+  - [ ] Analytics
+
+**Use cases:**
+- **Text conversations**: Type to Reachy when you can't speak
+- **Remote access**: Chat from anywhere on your network
+- **Document sharing**: Upload images/documents for analysis
+- **Quiet mode**: Interact without disturbing others
 
 **Success criteria:**
-- Accessible via dashboard ⚙️
-- Can adjust settings
-- Shows app status
+- Accessible via browser
+- Responsive chat interface
+- Can switch between voice and text modes
+- Shows robot emotions/status
+- Maintains conversation context across modalities
 
 ---
 
@@ -414,17 +538,42 @@ Step-by-step learning path to build a complete AI desk companion.
   - [x] Step 1.1: Project Setup
   - [x] Step 1.2: Emotion System
   - [x] Step 1.3: Movement Manager
-- [x] Phase 2: Conversation System (Complete!)
+- [x] Phase 2: Conversation System (95% Complete!)
   - [x] Step 2.1: Gemini API Setup
   - [x] Step 2.2: Real-time Voice Conversations
-  - [ ] Step 2.3: Integrate into Main App (NEXT!)
+  - [ ] **Step 2.3: Integrate into Main App (NEXT!)**
 - [ ] Phase 3: Vision & Awareness
+  - Camera integration, face detection, head tracking
 - [ ] Phase 4: Enhanced Expression
+  - Context-aware emotions tied to conversation
 - [ ] Phase 5: Advanced Intelligence
+  - Multimodal conversations (vision + voice)
+  - Real-time translation
 - [ ] Phase 6: Memory & Personality
+  - Short/long-term memory
+  - Proactive life assistant (daily planning, wellness)
+  - Gaming companion
+  - Core personality behaviors
 - [ ] Phase 7: Polish & Publishing
+  - Web chatbot interface
+  - Error handling & robustness
+  - Documentation & publishing
+
+---
+
+## Vision: The Complete Desk Companion
+
+**Reachy Mini will be:**
+- 🗣️ A **conversationalist** you can talk to naturally (voice + text)
+- 👀 A **visual assistant** that sees and understands your environment
+- 📅 A **proactive helper** for daily planning and wellness
+- 🎮 A **gaming buddy** that hypes you up and provides strategy
+- 🌍 A **translator** for multilingual conversations
+- 🧠 A **creative partner** for brainstorming and problem-solving
+- ❤️ A **companion** with personality that feels alive
 
 ---
 
 *Last updated: January 8, 2026*
 *Current focus: Integrate conversation system into main app to create real desk companion*
+*Next: Make Reachy a true companion, then add vision, then intelligence features*
