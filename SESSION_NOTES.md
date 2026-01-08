@@ -109,18 +109,28 @@ Make it a **real companion** by integrating conversation into `main.py`:
 ### File Structure (Updated)
 ```
 ReachyMiniCompanion/
-├── reachy_mini_companion/
-│   ├── __init__.py           # Package init (minimal)
-│   ├── main.py               # ReachyMiniCompanion app class
-│   ├── emotions.py           # Emotion system ✅
-│   └── movement_manager.py   # Movement orchestration ✅ NEW!
-├── index.html                # HF Space landing page
-├── style.css                 # HF Space styling
-├── pyproject.toml            # Package config with entry-points
-├── README.md                 # With YAML front matter
-├── ROADMAP.md                # Step-by-step development plan
-├── TESTING.md                # Testing guide
-├── test-dashboard.sh         # Automated test script
+├── reachy_mini_companion/     # Main package
+│   ├── __init__.py
+│   ├── main.py
+│   ├── emotions.py
+│   ├── movement_manager.py
+│   ├── conversation_manager.py
+│   ├── audio_converters.py
+│   └── config.py
+├── docs/                      # Documentation
+│   ├── CONVERSATION_MANAGER.md
+│   └── TESTING.md
+├── examples/                  # Example scripts
+│   └── simple_conversation.py
+├── tests/                     # Test suite
+│   ├── test_conversation.py
+│   ├── test_audio_echo.py
+│   └── test-dashboard.sh
+├── index.html                 # HF Space landing page
+├── style.css                  # HF Space styling
+├── pyproject.toml            # Package config
+├── README.md                 # Main documentation
+├── ROADMAP.md                # Development roadmap
 └── SESSION_NOTES.md          # This file
 ```
 
@@ -191,10 +201,10 @@ Three steps ahead:
 - ✅ Fixed RuntimeWarning by cleaning up `__init__.py`
 
 #### Documentation Created
-- ✅ `TESTING.md` - Complete testing guide
-- ✅ `test-dashboard.sh` - Automated testing script
+- ✅ `docs/TESTING.md` - Complete testing guide
+- ✅ `tests/test-dashboard.sh` - Automated testing script
 - ✅ Updated `README.md` with proper metadata
-- ✅ `ROADMAP.md` already exists with full plan
+- ✅ `ROADMAP.md` - Development roadmap
 
 ---
 
@@ -216,7 +226,7 @@ source /Users/jan.moons/Documents/Workspace/reachy_mini/reachy_mini_env/bin/acti
 
 ### Quick Test After Changes
 ```bash
-./test-dashboard.sh
+./tests/test-dashboard.sh
 ```
 
 Then click "Run" in browser at http://127.0.0.1:8000/
@@ -226,7 +236,7 @@ Then click "Run" in browser at http://127.0.0.1:8000/
 **Testing:**
 ```bash
 # Automated test
-./test-dashboard.sh
+./tests/test-dashboard.sh
 
 # Manual validation (may have TTY issues in non-interactive mode)
 reachy-mini-app-assistant check
@@ -318,10 +328,10 @@ curl http://127.0.0.1:8000/health-check
 - Conversation App: https://huggingface.co/spaces/pollen-robotics/reachy_mini_conversation_app
 
 ### Project Files
-- Implementation Plan: `/Users/jan.moons/.claude/plans/joyful-jumping-lerdorf.md`
 - GitHub: https://github.com/januxprobe/ReachyMiniCompanion
 - Roadmap: `ROADMAP.md`
-- Testing Guide: `TESTING.md`
+- Testing Guide: `docs/TESTING.md`
+- Session Notes: `SESSION_NOTES.md`
 
 ---
 
