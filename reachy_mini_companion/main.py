@@ -178,12 +178,15 @@ class ReachyMiniCompanion(ReachyMiniApp):
 
         reachy_mini.set_target(antennas=[antenna_pos, antenna_pos])
 
-    def start_conversation(self):
+    def start_conversation(self, with_greeting: bool = True):
         """
         Start a conversation with the robot.
 
         This creates a separate thread to run the async conversation.
         The robot will show curious emotion while starting.
+
+        Args:
+            with_greeting: If True, Gemini will greet first
         """
         if self.conversation_active:
             print("⚠️  Conversation already active")
@@ -206,8 +209,8 @@ class ReachyMiniCompanion(ReachyMiniApp):
             self.conversation_loop = loop
 
             try:
-                # Start conversation
-                loop.run_until_complete(self.conversation_manager.start_conversation())
+                # Start conversation with greeting
+                loop.run_until_complete(self.conversation_manager.start_conversation(with_greeting=with_greeting))
 
                 # Keep loop running
                 loop.run_forever()

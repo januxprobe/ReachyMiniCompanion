@@ -236,7 +236,7 @@ class ConversationManager:
 
         print("=" * 60 + "\n")
 
-    async def run_conversation(self, duration_seconds: Optional[float] = None):
+    async def run_conversation(self, duration_seconds: Optional[float] = None, initial_greeting: bool = False):
         """
         Run a conversation for a specified duration.
 
@@ -244,6 +244,7 @@ class ConversationManager:
 
         Args:
             duration_seconds: How long to run (None = infinite)
+            initial_greeting: If True, Gemini will greet first
         """
         # Reset statistics
         self.stats["session_start_time"] = time.time()
@@ -268,6 +269,12 @@ class ConversationManager:
             # Connect to Gemini Live API
             async with self.client.aio.live.connect(model=self.model, config=config) as session:
                 self._log("✅ Connected to Gemini Live API!")
+
+                # Send initial greeting if requested
+                if initial_greeting:
+                    self._log("👋 Sending greeting request...")
+                    await session.send(input="Say hello and introduce yourself as Reachy Mini, a friendly desk companion. Keep it brief.", end_of_turn=True)
+
                 self._log("🎙️  Conversation active! Speak to the robot.")
 
                 # Run all tasks in a TaskGroup (like official example)
@@ -310,12 +317,15 @@ class ConversationManager:
 
             self._log("✅ Conversation stopped")
 
-    async def start_conversation(self):
+    async def start_conversation(self, with_greeting: bool = False):
         """
         Start a conversation session.
 
         Creates a background task that runs the conversation until stopped.
         Use stop_conversation() to end the conversation gracefully.
+
+        Args:
+            with_greeting: If True, Gemini will greet first
         """
         if self._conversation_task is not None and not self._conversation_task.done():
             self._log("⚠️  Conversation already running")
@@ -326,8 +336,8 @@ class ConversationManager:
         # Clear stop event
         self._stop_event.clear()
 
-        # Create conversation task
-        self._conversation_task = asyncio.create_task(self.run_conversation())
+        # Create conversation task with greeting option
+        self._conversation_task = asyncio.create_task(self.run_conversation(initial_greeting=with_greeting))
 
         self._log("✅ Conversation started")
 
