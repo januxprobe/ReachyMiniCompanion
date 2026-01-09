@@ -42,11 +42,13 @@ try:
     from .emotions import EmotionManager
     from .movement_manager import MovementManager
     from .conversation_manager import ConversationManager
+    from .camera_worker import CameraWorker
     from .config import config
 except ImportError:
     from emotions import EmotionManager
     from movement_manager import MovementManager
     from conversation_manager import ConversationManager
+    from camera_worker import CameraWorker
     from config import config
 
 
@@ -60,6 +62,9 @@ class ReachyMiniCompanion(ReachyMiniApp):
 
     # Optional: URL to custom web interface
     custom_app_url: str | None = None
+
+    # Request media backend with camera enabled
+    request_media_backend: str = "default"
 
     def run(self, reachy_mini: ReachyMini, stop_event: threading.Event):
         """
@@ -122,6 +127,10 @@ class ReachyMiniCompanion(ReachyMiniApp):
         self.movement_manager = MovementManager(reachy_mini, verbose=True)
         print("   ✅ Movement manager ready")
 
+        # Initialize camera worker
+        self.camera_worker = CameraWorker(reachy_mini, verbose=True)
+        print("   ✅ Camera worker ready")
+
         # Initialize conversation manager
         self.conversation_manager = ConversationManager(
             robot=reachy_mini,
@@ -148,6 +157,9 @@ class ReachyMiniCompanion(ReachyMiniApp):
 
         # Start movement manager
         self.movement_manager.start()
+
+        # Start camera worker
+        self.camera_worker.start()
 
         # Welcome behavior - Happy emotion to greet the user
         print("\n   👋 Waking up Reachy...")
@@ -277,6 +289,11 @@ class ReachyMiniCompanion(ReachyMiniApp):
                 self.stop_conversation()
             except Exception as e:
                 print(f"   ⚠️  Error stopping conversation: {e}")
+
+        # Stop camera worker
+        if hasattr(self, 'camera_worker'):
+            self.camera_worker.stop()
+            print("   ✅ Camera worker stopped")
 
         # Stop movement manager
         if hasattr(self, 'movement_manager'):

@@ -29,9 +29,41 @@
 
 ---
 
-## Session: January 9, 2026
+## Session: January 9, 2026 (Continued)
 
 ### Today's Accomplishments ✅
+
+#### Phase 2.4: Initial Greeting Feature (COMPLETE!)
+- ✅ Added ability for Reachy to speak first on startup
+  - Added `initial_greeting` parameter to `run_conversation()`
+  - Sends text prompt to Gemini: "Say hello and introduce yourself as Reachy Mini..."
+  - Gemini greets first, then conversation continues naturally
+  - Auto-enabled in main.py via `start_conversation(with_greeting=True)`
+- ✅ Improved startup experience
+  - User knows immediately when Reachy is awake and listening
+  - No need to guess if conversation system is ready
+  - Natural interaction flow from the start
+
+#### Phase 3.1: Camera Integration (COMPLETE!)
+- ✅ Created CameraWorker background thread system
+  - Continuously captures frames in separate thread
+  - FPS tracking and reporting (~23 FPS in simulator)
+  - Thread-safe frame access with locking
+  - Graceful start/stop lifecycle
+  - Error handling for camera unavailability
+- ✅ Integrated into main.py
+  - Camera worker initialized with companion
+  - Auto-starts on launch
+  - Proper cleanup on shutdown
+  - Added `request_media_backend = "default"` for explicit camera requirement
+- ✅ Created demo_camera_worker.py
+  - Standalone test for camera functionality
+  - Shows frame shape and FPS statistics
+  - Captures for 10 seconds with live updates
+- ✅ Confirmed working in simulator
+  - Camera capturing at ~23 FPS
+  - No errors, clean operation
+  - Framework already uses correct media backend
 
 #### Phase 2.3: Conversation Integration into Main App (COMPLETE!)
 - ✅ Integrated conversation system into ReachyMiniCompanion main app
@@ -57,47 +89,60 @@
   - File organization rules documented
 
 ### What Works Now
+- 👋 **Greeting on startup** - Reachy introduces itself when waking up
 - 🎙️ **Auto-start conversations** - Speak to Reachy immediately on launch
+- 🎥 **Camera capture** - Background worker capturing frames at ~23 FPS
 - 🤖 **Integrated companion** - Conversation is part of main app, not separate script
 - 😊 **Emotion integration** - Robot shows emotions when conversation starts/stops
-- 🧹 **Clean shutdown** - Graceful cleanup of conversation threads
+- 🧹 **Clean shutdown** - Graceful cleanup of conversation threads and camera
 - ✅ **All tests pass** - 46/46 tests passing, including async tests
 
 ### Technical Highlights
-- Conversation runs in dedicated thread with asyncio event loop
-- Uses `run_coroutine_threadsafe()` for cross-thread async calls
-- Proper stop_event pattern for graceful shutdown
-- ConversationManager lifecycle: init → start → running → stop → cleanup
+- **Camera**: Background thread with `threading.Lock()` for thread-safe frame access
+- **FPS tracking**: Calculates actual capture rate every second
+- **Media backend**: Uses "default" mode for camera+audio (vs "default_no_video")
+- **Greeting**: Uses `session.send(input="...", end_of_turn=True)` before conversation loop
+- **Conversation**: Runs in dedicated thread with asyncio event loop
+- **Cross-thread**: Uses `run_coroutine_threadsafe()` for async calls
+- **Lifecycle**: init → start → running → stop → cleanup pattern for all components
 
-### Files Modified
-- `reachy_mini_companion/main.py` - Integrated conversation with auto-start
-- `reachy_mini_companion/conversation_manager.py` - Added start/stop methods
+### Files Created/Modified
+- `reachy_mini_companion/camera_worker.py` - NEW: Background camera capture system
+- `examples/demo_camera_worker.py` - NEW: Camera demo script
+- `reachy_mini_companion/main.py` - Added camera worker integration + `request_media_backend` attribute
+- `reachy_mini_companion/conversation_manager.py` - Added `initial_greeting` parameter
 - `tests/test_audio_converters.py` - Fixed sample rate expectations
 - `tests/test_gemini_live.py` - Added pytest.mark.asyncio decorators
 - `pyproject.toml` - Added pytest-asyncio dependency
 - `examples/` - Renamed to use demo_ prefix
 
 ### Git Status
-- All changes committed and pushed to GitHub
+- Ready to commit and push to GitHub
 - Repository: https://github.com/januxprobe/ReachyMiniCompanion
 - Branch: main
-- Latest commit: `a0c1bae` - Integrate conversation system into main app with auto-start
+- Previous commit: `68fd89c` - Add initial greeting
 
 ### Key Learnings Today
-1. **Tests can be wrong** - Working code is right, tests need to match reality
-2. **Threading async** - Running asyncio in separate thread requires event loop management
-3. **File organization matters** - Clear naming (demo_ vs test_) prevents confusion
-4. **Reference apps help** - Pollen's app showed us patterns to follow
-5. **Auto-start simplifies UX** - No buttons needed, just speak!
+1. **Greeting UX** - User needs feedback that system is ready and listening
+2. **Camera threading** - Background capture with thread-safe frame access
+3. **Media backends** - "default" enables camera, "default_no_video" disables it
+4. **Framework patterns** - Class attributes like `request_media_backend` control framework behavior
+5. **Explicit requirements** - Document what media backend is needed, even if redundant
+6. **Tests can be wrong** - Working code is right, tests need to match reality
+7. **Threading async** - Running asyncio in separate thread requires event loop management
 
 ### What's Next
-**Phase 3: Vision & Awareness (or Phase 2.4: UI Controls)**
+**Phase 3: Vision & Awareness (IN PROGRESS)**
 
-Two paths forward:
-1. **Add UI controls** - Web interface or keyboard shortcuts to start/stop conversation
-2. **Add vision system** - Camera integration, face detection, head tracking
+Completed:
+- ✅ Step 3.1: Camera Integration
 
-The conversation system is now fully integrated! Can start using it as-is or add more control/features.
+Next steps:
+- ⏳ Step 3.2: Face Detection - Detect faces in camera frames
+- ⏳ Step 3.3: Head Tracking - Make Reachy look at detected faces
+- ⏳ Step 3.4: Person Recognition - Remember and recognize people
+
+The camera is now capturing frames! Next we can add vision processing to detect and track faces.
 
 ---
 

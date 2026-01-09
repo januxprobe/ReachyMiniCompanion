@@ -28,7 +28,7 @@ An AI-powered desk companion built for Reachy Mini robot. Have natural voice con
 
 ## Current Status
 
-🚀 **Actively Developing** - Real conversations are working!
+🚀 **Actively Developing** - Reachy is now a talking, seeing companion!
 
 ### ✅ Phase 1: Foundation (Complete!)
 - [x] Project structure and development workflow
@@ -41,13 +41,20 @@ An AI-powered desk companion built for Reachy Mini robot. Have natural voice con
 - [x] Real-time bidirectional voice conversations
 - [x] Audio format conversion (stereo/mono, multiple sample rates)
 - [x] Back-and-forth natural dialogue
-- [ ] **Integration into main app (Next!)**
+- [x] Integration into main app with auto-start
+- [x] Initial greeting (Reachy introduces itself on startup)
+
+### 🔄 Phase 3: Vision & Awareness (In Progress)
+- [x] Camera integration with background worker
+- [ ] Face detection
+- [ ] Head tracking (look at faces)
+- [ ] Person recognition
 
 ### 🎯 Coming Next
-- Integrate conversations into companion app
-- Add camera vision and face tracking
+- Face detection and tracking
 - Context-aware emotions during conversation
 - Proactive life assistant features
+- Memory and personality system
 
 See [ROADMAP.md](ROADMAP.md) for detailed development plan.
 
@@ -62,16 +69,25 @@ Rich emotional expressions using head and antenna movements:
 
 ### 💬 Real-time Voice Conversations
 Natural conversations powered by Google Gemini Live API:
-- Bidirectional audio streaming (you talk → robot responds)
-- Back-and-forth dialogue with automatic voice detection
-- Interruption support (can interrupt the robot)
-- Clear audio at correct playback speed
+- **Auto-start with greeting** - Reachy introduces itself on startup
+- **Bidirectional audio** - You talk → robot responds naturally
+- **Continuous dialogue** - Back-and-forth conversation flow
+- **Interruption support** - Can interrupt the robot mid-response
+- **Clear audio** - Correct playback speed with format conversion
+
+### 👁️ Vision System
+Background camera capture for visual awareness:
+- **Continuous capture** - Background thread capturing at ~23 FPS
+- **Thread-safe access** - Latest frame always available
+- **FPS tracking** - Real-time performance monitoring
+- **Ready for vision** - Foundation for face detection and tracking
 
 ### 🏗️ Architecture
 - **Queue-based movement system** - Non-blocking execution with priorities
 - **Async audio streaming** - Separate tasks for listen, send, receive, play
+- **Background camera worker** - Thread-safe frame capture
 - **Format conversion** - Handles stereo/mono, 16kHz/24kHz/48kHz
-- **Clean lifecycle management** - Graceful start/stop
+- **Clean lifecycle management** - Graceful start/stop for all components
 
 ## Project Structure
 
@@ -82,16 +98,18 @@ ReachyMiniCompanion/
 │   ├── emotions.py                 # Emotion system
 │   ├── movement_manager.py         # Queue-based movement execution
 │   ├── conversation_manager.py     # Gemini Live API integration
+│   ├── camera_worker.py            # Background camera capture
 │   ├── audio_converters.py         # Audio format conversion
 │   └── config.py                   # Configuration management
 ├── docs/                           # Documentation
 │   ├── CONVERSATION_MANAGER.md     # Conversation system API docs
 │   └── TESTING.md                  # Testing guide
-├── examples/                       # Example scripts
-│   └── simple_conversation.py      # Quick conversation example
-├── tests/                          # Test suite
-│   ├── test_conversation.py        # Integration tests
-│   ├── test_audio_echo.py          # Audio I/O test
+├── examples/                       # Example scripts (demo_*.py)
+│   ├── demo_conversation_integration.py  # Conversation integration demo
+│   └── demo_camera_worker.py       # Camera capture demo
+├── tests/                          # Test suite (automated tests)
+│   ├── test_audio_converters.py    # Audio conversion tests
+│   ├── test_gemini_live.py         # Gemini API tests
 │   └── test-dashboard.sh           # Automated dashboard test
 ├── README.md                       # This file
 ├── ROADMAP.md                      # Development roadmap
