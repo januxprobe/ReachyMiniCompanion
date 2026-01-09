@@ -29,6 +29,78 @@
 
 ---
 
+## Session: January 9, 2026
+
+### Today's Accomplishments ✅
+
+#### Phase 2.3: Conversation Integration into Main App (COMPLETE!)
+- ✅ Integrated conversation system into ReachyMiniCompanion main app
+  - Added `start_conversation()` and `stop_conversation()` methods
+  - Conversation runs in separate thread with own event loop
+  - Graceful lifecycle management (start/stop/cleanup)
+  - Auto-start conversation on companion launch
+- ✅ Emotion integration with conversation
+  - Shows curious emotion when starting conversation
+  - Returns to neutral when stopping
+- ✅ All 46 tests passing!
+  - Fixed audio converter tests (tests were wrong, not code)
+  - Correct sample rate expectations (48kHz for Mac audio)
+  - Added pytest-asyncio for async test support
+  - Tests align with working conversation system
+- ✅ File organization cleanup
+  - Renamed examples with `demo_` prefix for consistency
+  - Removed redundant test files
+  - Clear separation: `tests/` = automated, `examples/` = demos
+- ✅ Documentation improvements
+  - Added development approach to SESSION_NOTES.md (small steps, testing focus)
+  - Added reference app link (Pollen's conversation app)
+  - File organization rules documented
+
+### What Works Now
+- 🎙️ **Auto-start conversations** - Speak to Reachy immediately on launch
+- 🤖 **Integrated companion** - Conversation is part of main app, not separate script
+- 😊 **Emotion integration** - Robot shows emotions when conversation starts/stops
+- 🧹 **Clean shutdown** - Graceful cleanup of conversation threads
+- ✅ **All tests pass** - 46/46 tests passing, including async tests
+
+### Technical Highlights
+- Conversation runs in dedicated thread with asyncio event loop
+- Uses `run_coroutine_threadsafe()` for cross-thread async calls
+- Proper stop_event pattern for graceful shutdown
+- ConversationManager lifecycle: init → start → running → stop → cleanup
+
+### Files Modified
+- `reachy_mini_companion/main.py` - Integrated conversation with auto-start
+- `reachy_mini_companion/conversation_manager.py` - Added start/stop methods
+- `tests/test_audio_converters.py` - Fixed sample rate expectations
+- `tests/test_gemini_live.py` - Added pytest.mark.asyncio decorators
+- `pyproject.toml` - Added pytest-asyncio dependency
+- `examples/` - Renamed to use demo_ prefix
+
+### Git Status
+- All changes committed and pushed to GitHub
+- Repository: https://github.com/januxprobe/ReachyMiniCompanion
+- Branch: main
+- Latest commit: `a0c1bae` - Integrate conversation system into main app with auto-start
+
+### Key Learnings Today
+1. **Tests can be wrong** - Working code is right, tests need to match reality
+2. **Threading async** - Running asyncio in separate thread requires event loop management
+3. **File organization matters** - Clear naming (demo_ vs test_) prevents confusion
+4. **Reference apps help** - Pollen's app showed us patterns to follow
+5. **Auto-start simplifies UX** - No buttons needed, just speak!
+
+### What's Next
+**Phase 3: Vision & Awareness (or Phase 2.4: UI Controls)**
+
+Two paths forward:
+1. **Add UI controls** - Web interface or keyboard shortcuts to start/stop conversation
+2. **Add vision system** - Camera integration, face detection, head tracking
+
+The conversation system is now fully integrated! Can start using it as-is or add more control/features.
+
+---
+
 ## Session: January 8, 2026 (Evening)
 
 ### Today's Accomplishments ✅
