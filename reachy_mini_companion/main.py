@@ -13,8 +13,30 @@ This is the foundation - we'll build it step by step!
 import threading
 import time
 import asyncio
+import warnings
+import logging
 from reachy_mini import ReachyMini, ReachyMiniApp
 from reachy_mini.utils import create_head_pose
+
+# Suppress antenna warnings when moves are running (harmless)
+# These warnings occur when antenna commands overlap with head movements - expected behavior
+# Need to suppress at multiple levels due to app framework logging setup
+warnings.filterwarnings("ignore", message=".*Ignoring antennas_joint_positions.*")
+
+# Also configure logging to suppress these warnings
+import sys
+
+class SuppressAntennaWarnings(logging.Filter):
+    def filter(self, record):
+        return "Ignoring antennas_joint_positions" not in record.getMessage()
+
+# Set up logging filter
+for handler in logging.root.handlers:
+    handler.addFilter(SuppressAntennaWarnings())
+
+# Also apply to specific loggers
+logging.getLogger('reachy_mini.daemon.backend.abstract').addFilter(SuppressAntennaWarnings())
+logging.getLogger('reachy_mini').addFilter(SuppressAntennaWarnings())
 
 try:
     from .emotions import EmotionManager
@@ -47,6 +69,10 @@ class ReachyMiniCompanion(ReachyMiniApp):
             reachy_mini: Pre-initialized ReachyMini instance
             stop_event: Threading event to signal graceful shutdown
         """
+        # Apply warning filter again (in case app framework reset logging)
+        for handler in logging.root.handlers:
+            handler.addFilter(SuppressAntennaWarnings())
+
         print("🤖 Reachy Mini Companion starting up...")
         print("   Press Stop in dashboard to exit gracefully")
 
@@ -123,27 +149,10 @@ class ReachyMiniCompanion(ReachyMiniApp):
         # Start movement manager
         self.movement_manager.start()
 
-        # Queue startup emotion tests (non-blocking!)
-        print("\n   🎭 Queuing startup emotion tests...")
-        self.movement_manager.execute_emotion(
-            self.emotion_manager, EmotionManager.CURIOUS, with_antennas=True
-        )
+        # Welcome behavior - Happy emotion to greet the user
+        print("\n   👋 Waking up Reachy...")
         self.movement_manager.execute_emotion(
             self.emotion_manager, EmotionManager.HAPPY, with_antennas=True
-        )
-        self.movement_manager.execute_emotion(
-            self.emotion_manager, EmotionManager.EXCITED, with_antennas=False
-        )
-        self.movement_manager.execute_emotion(
-            self.emotion_manager, EmotionManager.SAD, with_antennas=True
-        )
-
-        # Queue return to neutral
-        def return_neutral(robot):
-            self.emotion_manager.neutral()
-
-        self.movement_manager.execute_gesture(
-            return_neutral, name="return_to_neutral"
         )
 
         print(f"   📋 Queued {self.movement_manager.get_queue_size()} movements")
@@ -257,7 +266,7 @@ class ReachyMiniCompanion(ReachyMiniApp):
         """
         Cleanup when app stops.
 
-        Stop conversation, movement manager, and return robot to neutral position.
+        Stop conversation and movement manager.
         """
         # Stop conversation if active
         if hasattr(self, 'conversation_active') and self.conversation_active:
@@ -271,10 +280,6 @@ class ReachyMiniCompanion(ReachyMiniApp):
             self.movement_manager.stop()
             print("   ✅ Movement manager stopped")
 
-        # Return to neutral position
-        neutral_head = create_head_pose(roll=0, pitch=0, yaw=0)
-        reachy_mini.goto_target(head=neutral_head, antennas=[0, 0], duration=0.5)
-        time.sleep(0.5)
         print("   ✅ Cleanup complete")
 
 
