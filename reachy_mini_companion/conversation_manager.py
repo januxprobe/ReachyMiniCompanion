@@ -89,6 +89,10 @@ class ConversationManager:
         self.audio_queue_mic = asyncio.Queue(maxsize=5)
         self.audio_queue_output = asyncio.Queue()
 
+        # Conversation control
+        self._conversation_task: Optional[asyncio.Task] = None
+        self._stop_event = asyncio.Event()
+
         # Statistics
         self.stats = {
             "input_chunks_sent": 0,
@@ -282,12 +286,13 @@ class ConversationManager:
                                 raise asyncio.CancelledError("Duration completed")
                             tg.create_task(timeout())
                         else:
-                            # Run forever
+                            # Run until stop_event is set
                             self._log("Running conversation (press Ctrl+C to stop)...")
-                            async def run_forever():
-                                while True:
-                                    await asyncio.sleep(1)
-                            tg.create_task(run_forever())
+                            async def run_until_stopped():
+                                while not self._stop_event.is_set():
+                                    await asyncio.sleep(0.1)
+                                raise asyncio.CancelledError("Stopped by user")
+                            tg.create_task(run_until_stopped())
 
                 except asyncio.CancelledError:
                     self._log("Conversation ending...")
@@ -304,6 +309,56 @@ class ConversationManager:
                 self._print_session_stats()
 
             self._log("✅ Conversation stopped")
+
+    async def start_conversation(self):
+        """
+        Start a conversation session.
+
+        Creates a background task that runs the conversation until stopped.
+        Use stop_conversation() to end the conversation gracefully.
+        """
+        if self._conversation_task is not None and not self._conversation_task.done():
+            self._log("⚠️  Conversation already running")
+            return
+
+        self._log("Starting conversation...")
+
+        # Clear stop event
+        self._stop_event.clear()
+
+        # Create conversation task
+        self._conversation_task = asyncio.create_task(self.run_conversation())
+
+        self._log("✅ Conversation started")
+
+    async def stop_conversation(self):
+        """
+        Stop the current conversation session gracefully.
+
+        Signals the conversation to stop and waits for cleanup.
+        """
+        if self._conversation_task is None:
+            self._log("⚠️  No conversation running")
+            return
+
+        self._log("Stopping conversation...")
+
+        # Signal stop
+        self._stop_event.set()
+
+        # Wait for task to finish (with timeout)
+        try:
+            await asyncio.wait_for(self._conversation_task, timeout=5.0)
+        except asyncio.TimeoutError:
+            self._log("⚠️  Conversation didn't stop gracefully, cancelling...")
+            self._conversation_task.cancel()
+            try:
+                await self._conversation_task
+            except asyncio.CancelledError:
+                pass
+
+        self._conversation_task = None
+        self._log("✅ Conversation stopped")
 
 
 # Convenience function for quick testing

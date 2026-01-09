@@ -17,11 +17,13 @@ Usage:
 
 import asyncio
 import numpy as np
+import pytest
 from reachy_mini_companion.config import config
 from reachy_mini_companion.audio_converters import prepare_for_gemini
 from google import genai
 
 
+@pytest.mark.asyncio
 async def test_text_message():
     """Test sending a text message to Gemini Live API."""
     print("=" * 60)
@@ -86,6 +88,7 @@ async def test_text_message():
         return False
 
 
+@pytest.mark.asyncio
 async def test_audio_streaming():
     """Test sending audio to Gemini Live API."""
     print("\n" + "=" * 60)
@@ -182,6 +185,7 @@ async def test_audio_streaming():
         return False
 
 
+@pytest.mark.asyncio
 async def test_audio_with_speech():
     """Test with actual speech prompt using text first."""
     print("\n" + "=" * 60)

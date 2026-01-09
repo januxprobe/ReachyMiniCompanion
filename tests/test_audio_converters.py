@@ -332,9 +332,9 @@ class TestPrepareFromGemini:
 
         robot_audio = prepare_from_gemini(pcm_bytes, sample_rate=24000)
 
-        # Check shape: should be stereo at 16kHz
+        # Check shape: should be stereo at 48kHz (default target_sample_rate)
         assert robot_audio.shape[1] == 2  # Stereo
-        assert robot_audio.shape[0] == 16000  # Resampled to 16kHz
+        assert robot_audio.shape[0] == 48000  # Resampled to 48kHz
         assert robot_audio.dtype == np.float32
 
     def test_basic_preparation_16k(self):
@@ -345,17 +345,24 @@ class TestPrepareFromGemini:
 
         robot_audio = prepare_from_gemini(pcm_bytes, sample_rate=16000)
 
-        # Check shape: should be stereo at 16kHz (no resampling)
+        # Check shape: should be stereo at 48kHz (default target_sample_rate)
         assert robot_audio.shape[1] == 2  # Stereo
-        assert robot_audio.shape[0] == 16000  # Same length
+        assert robot_audio.shape[0] == 48000  # Resampled from 16kHz to 48kHz
         assert robot_audio.dtype == np.float32
 
-    def test_invalid_sample_rate(self):
-        """Test that invalid sample rates raise ValueError."""
-        pcm_bytes = np.zeros(100, dtype=np.int16).tobytes()
+    def test_custom_target_sample_rate(self):
+        """Test preparing audio with custom target sample rate (16kHz for robot hardware)."""
+        # Create mono PCM audio at 24kHz (1 second)
+        audio_24k = (np.random.randn(24000) * 5000).astype(np.int16)
+        pcm_bytes = audio_24k.tobytes()
 
-        with pytest.raises(ValueError, match="Unsupported sample rate"):
-            prepare_from_gemini(pcm_bytes, sample_rate=48000)
+        # Specify target_sample_rate for robot hardware
+        robot_audio = prepare_from_gemini(pcm_bytes, sample_rate=24000, target_sample_rate=16000)
+
+        # Check shape: should be stereo at 16kHz
+        assert robot_audio.shape[1] == 2  # Stereo
+        assert robot_audio.shape[0] == 16000  # Resampled to 16kHz
+        assert robot_audio.dtype == np.float32
 
 
 class TestGetAudioInfo:
@@ -435,9 +442,10 @@ class TestEndToEndIntegration:
         # Simulate Gemini response (100ms at 24kHz = 2400 samples)
         gemini_response = (np.random.randn(2400) * 3000).astype(np.int16).tobytes()
 
-        # Receive from Gemini
+        # Receive from Gemini (converts to 48kHz for Mac audio playback)
         robot_output = prepare_from_gemini(gemini_response, sample_rate=24000)
 
-        # Should be playable on robot
-        assert robot_output.shape == (1600, 2)
+        # Should be playable on Mac (48kHz stereo)
+        # 2400 samples at 24kHz -> 4800 samples at 48kHz
+        assert robot_output.shape == (4800, 2)
         assert robot_output.dtype == np.float32

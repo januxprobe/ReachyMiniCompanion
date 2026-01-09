@@ -2,6 +2,33 @@
 
 ---
 
+# ⚠️ IMPORTANT: Development Approach
+
+**Jan's Learning Style - READ THIS EVERY SESSION:**
+- **Step size**: Small, manageable steps (3-5 related changes at once)
+- **Not junior level**: Can handle multiple steps together, but break down larger features
+- **Always test**: Each change must be immediately testable to understand how it works
+- **Learning is priority**: Understanding the code is more important than speed
+- **Avoid big jumps**: No complex implementations all at once
+
+**File Organization Rules:**
+- `tests/` = Automated pytest tests ONLY (no manual interaction needed)
+- `examples/` = Manual demos and examples (prefix with `demo_`)
+- Keep clean separation between automated tests and demo code
+
+**This is critical - remember this at the start of EVERY session!**
+
+---
+
+## 📚 Reference Application
+
+**Pollen Robotics Official Conversation App** (Jan's inspiration):
+- Repository: https://github.com/pollen-robotics/reachy_mini_conversation_app
+- Uses OpenAI Realtime API (we use Gemini Live API instead)
+- Has layered motion system, face tracking, personality profiles, tool dispatch
+
+---
+
 ## Session: January 8, 2026 (Evening)
 
 ### Today's Accomplishments ✅

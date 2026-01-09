@@ -13,115 +13,190 @@ tags:
 
 # Reachy Mini Companion 🤖✨
 
-An AI-powered desk companion built for Reachy Mini robot. Makes your robot a friendly, interactive companion that can see, listen, think, and respond naturally.
+An AI-powered desk companion built for Reachy Mini robot. Have natural voice conversations, get help with daily tasks, and enjoy a companion with personality!
 
-## Vision
+## Vision: The Complete Desk Companion
 
-Create a physical AI companion that:
-- **Sees** - Recognizes you and tracks faces
-- **Listens** - Understands voice commands and conversations
-- **Thinks** - Uses AI/LLM for natural interactions
-- **Expresses** - Shows emotions through movements and speech
-- **Remembers** - Builds context and personality over time
-- **Engages** - Proactive interactions, not just reactive
+**Reachy Mini will be:**
+- 🗣️ A **conversationalist** you can talk to naturally (voice + text)
+- 👀 A **visual assistant** that sees and understands your environment
+- 📅 A **proactive helper** for daily planning and wellness
+- 🎮 A **gaming buddy** that hypes you up and provides strategy
+- 🌍 A **translator** for multilingual conversations
+- 🧠 A **creative partner** for brainstorming and problem-solving
+- ❤️ A **companion** with personality that feels alive
 
 ## Current Status
 
-🚧 **In Development** - Building step by step!
+🚀 **Actively Developing** - Real conversations are working!
 
-### ✅ Completed
-- [x] Project structure setup
-- [x] Basic Reachy Mini app framework
-- [x] Development environment configured
+### ✅ Phase 1: Foundation (Complete!)
+- [x] Project structure and development workflow
+- [x] Emotion system (4 emotions: happy, sad, excited, curious)
+- [x] Antenna behaviors (wave, bounce, droop)
+- [x] Movement Manager (non-blocking queue-based execution)
 
-### 🎯 Next Steps
-See [ROADMAP.md](ROADMAP.md) for detailed step-by-step learning plan.
+### ✅ Phase 2: Conversation System (Complete!)
+- [x] Gemini Live API integration
+- [x] Real-time bidirectional voice conversations
+- [x] Audio format conversion (stereo/mono, multiple sample rates)
+- [x] Back-and-forth natural dialogue
+- [ ] **Integration into main app (Next!)**
+
+### 🎯 Coming Next
+- Integrate conversations into companion app
+- Add camera vision and face tracking
+- Context-aware emotions during conversation
+- Proactive life assistant features
+
+See [ROADMAP.md](ROADMAP.md) for detailed development plan.
+
+## Features
+
+### 🎭 Emotions & Expression
+Rich emotional expressions using head and antenna movements:
+- **Happy** - Looking up with raised antennas
+- **Sad** - Looking down with droopy antennas
+- **Excited** - Fast nodding with alternating antennas
+- **Curious** - Head tilting side to side
+
+### 💬 Real-time Voice Conversations
+Natural conversations powered by Google Gemini Live API:
+- Bidirectional audio streaming (you talk → robot responds)
+- Back-and-forth dialogue with automatic voice detection
+- Interruption support (can interrupt the robot)
+- Clear audio at correct playback speed
+
+### 🏗️ Architecture
+- **Queue-based movement system** - Non-blocking execution with priorities
+- **Async audio streaming** - Separate tasks for listen, send, receive, play
+- **Format conversion** - Handles stereo/mono, 16kHz/24kHz/48kHz
+- **Clean lifecycle management** - Graceful start/stop
 
 ## Project Structure
 
 ```
 ReachyMiniCompanion/
-├── pyproject.toml                  # Python package configuration
-├── README.md                       # This file
-├── ROADMAP.md                      # Step-by-step development plan
 ├── reachy_mini_companion/          # Main package
-│   ├── __init__.py
-│   ├── main.py                     # App entry point
-│   └── static/                     # Optional web UI (future)
-└── tests/                          # Unit tests (future)
+│   ├── main.py                     # ReachyMiniApp entry point
+│   ├── emotions.py                 # Emotion system
+│   ├── movement_manager.py         # Queue-based movement execution
+│   ├── conversation_manager.py     # Gemini Live API integration
+│   ├── audio_converters.py         # Audio format conversion
+│   └── config.py                   # Configuration management
+├── docs/                           # Documentation
+│   ├── CONVERSATION_MANAGER.md     # Conversation system API docs
+│   └── TESTING.md                  # Testing guide
+├── examples/                       # Example scripts
+│   └── simple_conversation.py      # Quick conversation example
+├── tests/                          # Test suite
+│   ├── test_conversation.py        # Integration tests
+│   ├── test_audio_echo.py          # Audio I/O test
+│   └── test-dashboard.sh           # Automated dashboard test
+├── README.md                       # This file
+├── ROADMAP.md                      # Development roadmap
+├── SESSION_NOTES.md                # Development journal
+└── pyproject.toml                  # Package configuration
 ```
 
-## Development Setup
+## Quick Start
 
 ### Prerequisites
 - Reachy Mini robot or simulator
 - Python 3.10+
 - Reachy Mini SDK installed
+- Google Gemini API key
 
-### Local Development
+### Installation
 
 ```bash
-# Activate Reachy environment
-reachy
-
 # Clone repository
-cd ~/Documents/Workspace
 git clone https://github.com/januxprobe/ReachyMiniCompanion.git
 cd ReachyMiniCompanion
 
 # Install in development mode
 pip install -e .
 
-# Test locally (with simulator running)
-python reachy_mini_companion/main.py
+# Set up API key
+cp .env.example .env
+# Edit .env and add your GEMINI_API_KEY
 ```
 
-### Testing with Dashboard
+### Test Voice Conversations
 
 ```bash
-# Install in development mode
-pip install -e .
+# Test real-time conversations (30 seconds)
+python tests/test_conversation.py --duration 30
 
-# Start dashboard
-reachy-mini-daemon
-
-# Navigate to http://127.0.0.1:8000/
-# Install app from local path
-# Click Run to test
+# The test will show "🎤 SPEAK NOW!" when ready
+# Speak naturally, the robot will respond!
 ```
 
-## Installation on Robot
+### Run via Dashboard
 
-Once published to Hugging Face, users can:
-1. Open Reachy Mini dashboard
-2. Go to Applications tab
-3. Install from Hugging Face Space
-4. Click Run
+```bash
+# Install the app
+pip install -e .
 
-## Learning Approach
+# Start Reachy Mini dashboard
+mjpython -m reachy_mini.daemon.app.main --sim
 
-This project is built **step by step** with clear learning goals:
+# Navigate to http://127.0.0.1:8000/
+# Go to Applications tab
+# Install from local path
+# Click Run
+```
 
-1. **Foundation** - Basic app structure ✅
-2. **Vision** - Camera and face detection
-3. **Interaction** - Emotions and gestures
-4. **Intelligence** - AI/LLM integration
-5. **Personality** - Memory and context
-6. **Polish** - Web UI and refinement
+## Development
 
-Each step builds on the previous, with testing at each stage.
+### Testing
+
+```bash
+# Quick automated test
+./tests/test-dashboard.sh
+
+# Test conversations
+python tests/test_conversation.py
+
+# Test audio I/O
+python tests/test_audio_echo.py
+
+# Manual validation
+reachy-mini-app-assistant check
+```
+
+### Project Commands
+
+```bash
+# Reinstall after code changes
+pip install -e .
+
+# Git workflow
+git status
+git add .
+git commit -m "Description"
+git push
+```
 
 ## Technologies
 
 - **Robot Control**: Reachy Mini SDK
-- **Computer Vision**: OpenCV, face detection
-- **AI/LLM**: Hugging Face Inference API (planned)
-- **Speech**: Text-to-speech synthesis
-- **Framework**: ReachyMiniApp (runs via dashboard)
+- **AI Conversations**: Google Gemini Live API (native audio)
+- **Audio Processing**: NumPy, SciPy (resampling)
+- **Async Operations**: asyncio, TaskGroups
+- **Computer Vision**: OpenCV (planned)
+- **Framework**: ReachyMiniApp (dashboard integration)
+
+## Documentation
+
+- **[ROADMAP.md](ROADMAP.md)** - Complete development plan with phases
+- **[SESSION_NOTES.md](SESSION_NOTES.md)** - Development journal and quick reference
+- **[docs/TESTING.md](docs/TESTING.md)** - Testing workflow and commands
+- **[docs/CONVERSATION_MANAGER.md](docs/CONVERSATION_MANAGER.md)** - Conversation API reference
 
 ## Contributing
 
-This is a personal learning project, but ideas and suggestions welcome!
+This is a personal learning project, but ideas and suggestions are welcome! Feel free to open issues or discussions.
 
 ## License
 
@@ -129,6 +204,12 @@ Apache 2.0
 
 ## About
 
+Building a true AI desk companion, step by step, with learning and experimentation at every stage.
+
 Built with ❤️ for Reachy Mini
 
-Last updated: January 7, 2026
+---
+
+**Last updated:** January 8, 2026
+**Current Phase:** Integrating conversation system into main app
+**Repository:** https://github.com/januxprobe/ReachyMiniCompanion

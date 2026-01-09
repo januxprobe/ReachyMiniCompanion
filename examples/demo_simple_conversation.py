@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple Conversation Example
+Demo: Simple Conversation
 
 A minimal example showing how to use the ConversationManager
 to enable voice conversations with Reachy Mini.
@@ -11,7 +11,7 @@ This demonstrates:
 - Graceful shutdown
 
 Usage:
-    python examples/simple_conversation.py
+    python examples/demo_simple_conversation.py
 """
 
 import asyncio
